@@ -63,10 +63,10 @@
       z-index: 999;
       padding: 10px;
       box-sizing: border-box;
-      overflow-y: auto; /* rolagem vertical se o conteúdo for muito grande */
+      overflow-y: auto; /* rolagem vertical se precisar */
     }
 
-    /* Container do convite (o “modal” em si) em telas grandes */
+    /* Container do convite (o “modal” em si) */
     .convite-container {
       position: relative;
       background: #fff;
@@ -135,18 +135,22 @@
       font-size: 16px;
     }
 
-    /* Input e botão de confirmação */
+    /* Container de confirmação */
     .confirmacao-container {
       margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap; /* se muito estreito, quebra linha */
+      gap: 10px;       /* espaçamento entre input e botão */
     }
+
     .confirmacao-container input {
       padding: 10px;
       border: 2px solid #ec407a;
       border-radius: 5px;
       font-size: 16px;
-      width: 70%;
       max-width: 300px;
-      margin-right: 5px;
     }
     .confirmacao-container button {
       padding: 10px 20px;
@@ -211,7 +215,6 @@
       align-items: center;
       z-index: 2000; /* acima do convite */
     }
-    /* Contêiner para as Hello Kittys girando em círculo */
     .loading-circle {
       position: relative;
       width: 200px;
@@ -227,7 +230,6 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-    /* Posicionamento das Hello Kittys em círculo */
     .kitty-spin:nth-child(1) {
       top: 0; left: 50%;
       transform: translateX(-50%);
@@ -261,35 +263,26 @@
       transform: translate(-50%, -50%);
     }
 
-    /*  
-       =========================
-         AJUSTES para telas < 600px
-       =========================
-       Deixamos o convite com 80% da tela,
-       tudo menor: fontes, imagem, etc.
-    */
+    /* Responsivo < 600px */
     @media (max-width: 600px) {
       .overlay {
         padding: 0;
         align-items: center; 
       }
-
       .convite-container {
-        width: 80vw;        /* 80% da largura da tela */
-        height: 80vh;       /* 80% da altura da tela */
+        width: 80vw;
+        height: 80vh;
         max-width: none;
-        max-height: none;   /* Senão conflita com 80vh */
+        max-height: none;
         margin: 0;
-        padding: 10px;      /* Menos padding */
-        overflow-y: auto;   /* Rolagem dentro do convite se precisar */
+        padding: 10px;
+        overflow-y: auto;
         border-radius: 8px;
       }
-
       .kitty-img {
         max-width: 100px;
         margin-bottom: 10px;
       }
-
       .convite-container h1 {
         font-size: 20px;
         margin-bottom: 5px;
@@ -303,17 +296,17 @@
         margin-bottom: 15px;
         line-height: 1.4;
       }
-
-      .confirmacao-container input,
+      .confirmacao-container {
+        margin-bottom: 15px;
+        gap: 12px;
+      }
+      .confirmacao-container input, 
       .confirmacao-container button {
         font-size: 14px;
       }
-
       #mensagem-confirmacao {
         font-size: 13px;
       }
-
-      /* Deixar estrelas menores e ocultar a maioria */
       .estrela {
         font-size: 18px;
       }
@@ -345,7 +338,7 @@
       <p>
         Vai rolar um barzinho especial e quero você comigo!
         <br />
-        O tema não é Hello Kitty, mas vai ser do jeitinho que eu amo.
+        O tema não é Hello Kitty, mas vai ser do jeitinho que eu amo - simples, divertido e cheio de gente querida.
       </p>
       <p>
         <strong>Data:</strong> 19 de Abril<br />
@@ -359,7 +352,8 @@
         </a>
       </p>
 
-      <div class="confirmacao-container">
+      <!-- Container de input e botão -->
+      <div class="confirmacao-container" id="area-confirmacao">
         <input
           type="text"
           id="nome"
@@ -369,6 +363,7 @@
         <button onclick="confirmarPresenca()">Confirmar</button>
       </div>
 
+      <!-- Mensagem de confirmação -->
       <div id="mensagem-confirmacao"></div>
 
       <!-- Estrelas decorativas -->
@@ -377,7 +372,6 @@
       <span class="estrela" style="top: 50px; left: 200px;">★</span>
       <span class="estrela" style="top: 150px; left: 300px;">★</span>
       <span class="estrela" style="bottom: 40px; right: 50px;">★</span>
-      <!-- (As demais estrelas ficaram ocultas em telas menores) -->
     </div>
   </div>
 
@@ -410,6 +404,7 @@
       const nome = document.getElementById("nome").value.trim();
       const mensagemDiv = document.getElementById("mensagem-confirmacao");
       const loadingOverlay = document.getElementById("loading-overlay");
+      const confirmacaoArea = document.getElementById("area-confirmacao");
 
       if (nome === "") {
         alert("Por favor, insira seu nome para confirmar a presença.");
@@ -429,9 +424,17 @@
       })
       .then(response => response.text())
       .then(textoResposta => {
-        mensagemDiv.textContent = `Obrigado(a), ${nome}! Sua presença foi confirmada.`;
-        document.getElementById("nome").value = "";
+        // Mostra a mensagem de confirmação
+        // Inclui uma mini Hello Kitty com <img> pequeno
+        mensagemDiv.innerHTML = `
+          Obrigado(a), ${nome}! Sua presença foi confirmada. 
+          <img src="hello.png" alt="Mini Hello Kitty" style="width:30px; margin-left:5px;" />
+        `;
+
         console.log("Resposta do servidor:", textoResposta);
+
+        // Remove ou esconde o input e o botão
+        confirmacaoArea.style.display = "none";
       })
       .catch(error => {
         mensagemDiv.textContent = "Ocorreu um erro ao confirmar. Tente novamente.";
