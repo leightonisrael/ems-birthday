@@ -2,6 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Convite Ems Birthday</title>
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
@@ -12,18 +13,23 @@
       padding: 0;
       box-sizing: border-box;
     }
+
+    /* Corpo principal */
     body {
       background: #f8bbd0; /* Rosa claro */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      width: 100%;
+      min-height: 100vh;
       font-family: 'Gloria Hallelujah', cursive;
     }
+
     h1, h2, p, button {
       font-family: 'Gloria Hallelujah', cursive;
     }
+
     .open-invite-btn {
       background: #fff;
       border: 2px solid #ec407a;
@@ -35,10 +41,13 @@
       transition: 0.3s;
       text-transform: uppercase;
     }
+
     .open-invite-btn:hover {
       background: #ec407a;
       color: #fff;
     }
+
+    /* Overlay do modal (fundo escuro) */
     .overlay {
       position: fixed;
       top: 0;
@@ -50,23 +59,29 @@
       justify-content: center;
       align-items: center;
       z-index: 999;
+      padding: 10px; /* pra evitar que o conteúdo encoste demais nas bordas */
     }
+
+    /* Container do convite (o “modal” em si) */
     .convite-container {
       position: relative;
       background: #fff;
       max-width: 600px;
-      width: 90%;
+      width: 100%;
       border-radius: 10px;
       padding: 20px;
       text-align: center;
       box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
-      overflow: hidden;
+      overflow: hidden; /* permite cortar as estrelas se ultrapassarem */
     }
+
     .convite-container a {
       color: #ec407a;
       text-decoration: none;
       font-weight: bold;
     }
+
+    /* Fechar convite (botão x) */
     .close-btn {
       position: absolute;
       top: 10px;
@@ -84,33 +99,42 @@
       justify-content: center;
       transition: 0.3s;
     }
+
     .close-btn:hover {
       background: #ec407a;
       color: #fff;
     }
+
+    /* Imagem da Hello Kitty */
     .kitty-img {
       max-width: 200px;
       margin-bottom: 15px;
     }
+
     .convite-container h1 {
       color: #ec407a;
       margin-bottom: 5px;
       font-size: 32px;
     }
+
     .convite-container h2 {
       color: #ad1457;
       margin-bottom: 15px;
       font-size: 24px;
     }
+
     .convite-container p {
       color: #333;
       margin-bottom: 20px;
       line-height: 1.5;
       font-size: 16px;
     }
+
+    /* Input e botão de confirmação */
     .confirmacao-container {
       margin-bottom: 20px;
     }
+
     .confirmacao-container input {
       padding: 10px;
       border: 2px solid #ec407a;
@@ -120,6 +144,7 @@
       max-width: 300px;
       margin-right: 5px;
     }
+
     .confirmacao-container button {
       padding: 10px 20px;
       border: none;
@@ -130,27 +155,35 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
+
     .confirmacao-container button:hover {
       background-color: #d81b60;
     }
+
     #mensagem-confirmacao {
       color: #ec407a;
       font-weight: bold;
       font-size: 16px;
       margin-top: 10px;
     }
+
+    /* Estrelas animadas */
     .estrela {
       position: absolute;
       font-size: 24px;
       color: gold;
       animation: pisca 2s infinite ease-in-out;
       opacity: 0.8;
-      pointer-events: none;
+      pointer-events: none; /* Para não interferir no clique */
     }
+
+    /* Animação de "piscar" das estrelas */
     @keyframes pisca {
       0%, 100% { opacity: 0.8; transform: scale(1); }
       50% { opacity: 0.2; transform: scale(1.2); }
     }
+
+    /* Animação para abrir o convite */
     @keyframes abrirConvite {
       0% {
         transform: scale(0.5);
@@ -161,256 +194,129 @@
         opacity: 1;
       }
     }
+
     .overlay .convite-container {
       animation: abrirConvite 0.5s ease-out;
     }
-  /* Fundo escuro para o loading */
-  #loading-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
 
-  /* Contêiner para as Hello Kittys girando em círculo */
-  .loading-circle {
-    position: relative;
-    width: 200px; /* Aumente o tamanho do círculo para acomodar 8 imagens */
-    height: 200px;
-  }
-
-  .loading-circle .kitty-spin {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-  }
-
-  /* Posicionamento das Hello Kittys em círculo */
-  .loading-circle .kitty-spin:nth-child(1) {
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .loading-circle .kitty-spin:nth-child(2) {
-    top: 15%;
-    left: 85%;
-    transform: translate(-50%, -50%);
-  }
-  .loading-circle .kitty-spin:nth-child(3) {
-    top: 50%;
-    left: 100%;
-    transform: translate(-50%, -50%);
-  }
-  .loading-circle .kitty-spin:nth-child(4) {
-    top: 85%;
-    left: 85%;
-    transform: translate(-50%, -50%);
-  }
-  .loading-circle .kitty-spin:nth-child(5) {
-    bottom: -20%; /* Ajuste para descer um pouco mais */
-    left: 50%;
-    transform: translateX(-50%);
-  }
-  .loading-circle .kitty-spin:nth-child(6) {
-    top: 85%;
-    left: 15%;
-    transform: translate(-50%, -50%);
-  }
-  .loading-circle .kitty-spin:nth-child(7) {
-    top: 50%;
-    left: 0;
-    transform: translate(-50%, -50%);
-  }
-  .loading-circle .kitty-spin:nth-child(8) {
-    top: 15%;
-    left: 15%;
-    transform: translate(-50%, -50%);
-  }
-
-  /* Animação de rotação */
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
+    /* Fundo escuro para o loading */
+    #loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  /* Ajuste para telas menores (smartphones) */
-  @media (max-width: 768px) {
-    /* Ajuste do círculo de loading */
+
+    /* Contêiner para as Hello Kittys girando em círculo */
     .loading-circle {
-      width: 150px; /* Reduz o tamanho do círculo */
-      height: 150px;
+      position: relative;
+      width: 200px; /* Tamanho do círculo p/ 8 imagens */
+      height: 200px;
     }
 
     .loading-circle .kitty-spin {
-      width: 40px; /* Reduz o tamanho das imagens */
-      height: 40px;
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
     }
 
-    /* Ajuste do convite */
-    .convite-container {
-      max-width: 90%; /* Reduz a largura do convite */
-      padding: 15px;
+    /* Posicionamento das Hello Kittys em círculo */
+    .loading-circle .kitty-spin:nth-child(1) {
+      top: 0;          left: 50%;
+      transform: translateX(-50%);
+    }
+    .loading-circle .kitty-spin:nth-child(2) {
+      top: 15%;        left: 85%;
+      transform: translate(-50%, -50%);
+    }
+    .loading-circle .kitty-spin:nth-child(3) {
+      top: 50%;        left: 100%;
+      transform: translate(-50%, -50%);
+    }
+    .loading-circle .kitty-spin:nth-child(4) {
+      top: 85%;        left: 85%;
+      transform: translate(-50%, -50%);
+    }
+    .loading-circle .kitty-spin:nth-child(5) {
+      bottom: -20%;    left: 50%;
+      transform: translateX(-50%);
+    }
+    .loading-circle .kitty-spin:nth-child(6) {
+      top: 85%;        left: 15%;
+      transform: translate(-50%, -50%);
+    }
+    .loading-circle .kitty-spin:nth-child(7) {
+      top: 50%;        left: 0;
+      transform: translate(-50%, -50%);
+    }
+    .loading-circle .kitty-spin:nth-child(8) {
+      top: 15%;        left: 15%;
+      transform: translate(-50%, -50%);
     }
 
-    .convite-container h1 {
-      font-size: 24px; /* Reduz o tamanho do título */
+    /* Animação de rotação das mini "Hello Kittys" */
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
     }
 
-    .convite-container h2 {
-      font-size: 18px; /* Reduz o tamanho do subtítulo */
-    }
+    /* =========================
+       RESPONSIVO: telas < 600px
+       ========================= */
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
 
-    .convite-container p {
-      font-size: 14px; /* Reduz o tamanho do texto */
-    }
+      .open-invite-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+      }
 
-    .confirmacao-container input {
-      width: 100%; /* Faz o input ocupar toda a largura */
-      margin-bottom: 10px; /* Adiciona espaçamento entre o input e o botão */
-    }
+      .convite-container {
+        padding: 15px;
+      }
 
-    .confirmacao-container button {
-      width: 100%; /* Faz o botão ocupar toda a largura */
-    }
+      .kitty-img {
+        max-width: 150px;
+      }
 
-    /* Ajuste do botão de abrir o convite */
-    .open-invite-btn {
-      font-size: 16px; /* Reduz o tamanho da fonte */
-      padding: 10px 20px; /* Ajusta o padding */
-    }
-  }
+      .convite-container h1 {
+        font-size: 26px;
+      }
 
-  @media (max-width: 480px) {
-    /* Ajuste adicional para telas muito pequenas */
-    .loading-circle {
-      width: 120px; /* Reduz ainda mais o tamanho do círculo */
-      height: 120px;
-    }
+      .convite-container h2 {
+        font-size: 20px;
+      }
 
-    .loading-circle .kitty-spin {
-      width: 30px; /* Reduz ainda mais o tamanho das imagens */
-      height: 30px;
-    }
+      .convite-container p {
+        font-size: 14px;
+      }
 
-    .convite-container h1 {
-      font-size: 20px; /* Reduz o tamanho do título */
-    }
+      .confirmacao-container input {
+        width: 100%;
+        margin-bottom: 10px;
+      }
 
-    .convite-container h2 {
-      font-size: 16px; /* Reduz o tamanho do subtítulo */
-    }
+      .confirmacao-container button {
+        width: 100%;
+      }
 
-    .convite-container p {
-      font-size: 12px; /* Reduz o tamanho do texto */
+      #mensagem-confirmacao {
+        font-size: 14px;
+      }
     }
-  }
-  /* Ajuste para telas menores (tablets e smartphones) */
-  @media (max-width: 768px) {
-    body {
-      padding: 10px; /* Adiciona espaçamento nas laterais */
-    }
-
-    .convite-container {
-      max-width: 90%; /* Reduz a largura do convite */
-      padding: 15px; /* Reduz o padding interno */
-    }
-
-    .convite-container h1 {
-      font-size: 24px; /* Reduz o tamanho do título */
-    }
-
-    .convite-container h2 {
-      font-size: 18px; /* Reduz o tamanho do subtítulo */
-    }
-
-    .convite-container p {
-      font-size: 14px; /* Reduz o tamanho do texto */
-    }
-
-    .confirmacao-container input {
-      width: 100%; /* Faz o input ocupar toda a largura */
-      margin-bottom: 10px; /* Adiciona espaçamento entre o input e o botão */
-    }
-
-    .confirmacao-container button {
-      width: 100%; /* Faz o botão ocupar toda a largura */
-    }
-
-    .open-invite-btn {
-      font-size: 16px; /* Reduz o tamanho da fonte */
-      padding: 10px 20px; /* Ajusta o padding */
-    }
-
-    .estrela {
-      font-size: 18px; /* Reduz o tamanho das estrelas decorativas */
-    }
-  }
-
-  /* Ajuste para telas muito pequenas (smartphones pequenos) */
-  @media (max-width: 480px) {
-    body {
-      padding: 5px; /* Reduz ainda mais o espaçamento nas laterais */
-    }
-
-    .convite-container {
-      max-width: 100%; /* Faz o convite ocupar quase toda a largura */
-      padding: 10px; /* Reduz ainda mais o padding interno */
-    }
-
-    .convite-container h1 {
-      font-size: 20px; /* Reduz o tamanho do título */
-    }
-
-    .convite-container h2 {
-      font-size: 16px; /* Reduz o tamanho do subtítulo */
-    }
-
-    .convite-container p {
-      font-size: 12px; /* Reduz o tamanho do texto */
-    }
-
-    .kitty-img {
-      max-width: 150px; /* Reduz o tamanho da imagem da Hello Kitty */
-    }
-
-    .confirmacao-container input {
-      font-size: 14px; /* Reduz o tamanho da fonte do input */
-    }
-
-    .confirmacao-container button {
-      font-size: 14px; /* Reduz o tamanho da fonte do botão */
-      padding: 8px 15px; /* Ajusta o padding */
-    }
-
-    .open-invite-btn {
-      font-size: 14px; /* Reduz o tamanho da fonte */
-      padding: 8px 15px; /* Ajusta o padding */
-    }
-
-    .estrela {
-      font-size: 14px; /* Reduz ainda mais o tamanho das estrelas decorativas */
-    }
-
-    .loading-circle {
-      width: 100px; /* Reduz o tamanho do círculo de loading */
-      height: 100px;
-    }
-
-    .loading-circle .kitty-spin {
-      width: 25px; /* Reduz o tamanho das imagens no círculo */
-      height: 25px;
-    }
-  }
   </style>
 </head>
 <body>
@@ -435,19 +341,14 @@
       <p>
         Vai rolar um barzinho especial e quero você comigo!
         <br />
-        O tema não é Hello Kitty, mas vai ser do jeitinho que eu amo - simples, divertido e cheio de gente querida.
+        O tema não é Hello Kitty, mas vai ser do jeitinho que eu amo – simples, divertido e cheio de gente querida.
       </p>
       <p>
         <strong>Data:</strong> 19 de Abril<br />
         <strong>Horário:</strong> 19h<br />
         <strong>Local:</strong>
-        <a href="https://maps.app.goo.gl/JzQqeo6BCFPaQKGJ6">
+        <a href="https://maps.app.goo.gl/JzQqeo6BCFPaQKGJ6" target="_blank">
           Bafafá Bar
-          <img 
-            src="link-icon.png" 
-            alt="Ícone de link" 
-            style="width: 16px; height: 16px; margin-left: 5px; vertical-align: middle;"
-          />
         </a>
       </p>
 
@@ -455,6 +356,8 @@
         <input type="text" id="nome" placeholder="Digite seu nome" autocomplete="off" />
         <button onclick="confirmarPresenca()">Confirmar</button>
       </div>
+
+      <!-- Overlay de loading com Hello Kittys girando -->
       <div id="loading-overlay" style="display: none;">
         <div class="loading-circle">
           <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
@@ -467,6 +370,7 @@
           <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
         </div>
       </div>
+
       <div id="mensagem-confirmacao"></div>
 
       <!-- Estrelas decorativas -->
@@ -500,26 +404,26 @@
     }
 
     function confirmarPresenca() {
-    const nome = document.getElementById("nome").value.trim();
-    const mensagemDiv = document.getElementById("mensagem-confirmacao");
-    const loadingOverlay = document.getElementById("loading-overlay");
+      const nome = document.getElementById("nome").value.trim();
+      const mensagemDiv = document.getElementById("mensagem-confirmacao");
+      const loadingOverlay = document.getElementById("loading-overlay");
 
-    if (nome === "") {
-      alert("Por favor, insira seu nome para confirmar a presença.");
-      return;
-    }
+      if (nome === "") {
+        alert("Por favor, insira seu nome para confirmar a presença.");
+        return;
+      }
 
-    // Exibe o overlay de loading
-    loadingOverlay.style.display = "flex";
-    mensagemDiv.textContent = "";
+      // Exibe o overlay de loading
+      loadingOverlay.style.display = "flex";
+      mensagemDiv.textContent = "";
 
-    fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: "nome=" + encodeURIComponent(nome)
-    })
+      fetch(API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "nome=" + encodeURIComponent(nome)
+      })
       .then(response => response.text())
       .then(textoResposta => {
         mensagemDiv.textContent = `Obrigado(a), ${nome}! Sua presença foi confirmada.`;
@@ -534,7 +438,7 @@
         // Oculta o overlay de loading
         loadingOverlay.style.display = "none";
       });
-  }
+    }
   </script>
 </body>
 </html>
