@@ -201,7 +201,7 @@
       animation: abrirConvite 0.4s ease-out;
     }
 
-    /* Overlay de LOADING (tela inteira), com Hello Kittys girando ao centro */
+    /* Overlay de LOADING (tela inteira) */
     #loading-overlay {
       position: fixed;
       top: 0;
@@ -210,31 +210,34 @@
       height: 100vh;
       background: rgba(0, 0, 0, 0.7);
       display: none;
-      justify-content: center;
-      align-items: center;
       z-index: 2000; /* acima do convite */
     }
+
+    /* Círculo para posicionar as mini Hello Kittys */
     .loading-circle {
-      position: relative;
+      position: absolute;       /* PARA centralizar no overlay */
+      top: 45%;                 /* CENTRALIZA verticalmente */
+      left: 45%;                /* CENTRALIZA horizontalmente */
+      transform: translate(-50%, -50%); /* Ajusta âncora */
       width: 200px;
       height: 200px;
     }
+
+    /* Cada Hello Kitty gira em torno do contêiner */
     .kitty-spin {
       position: absolute;
       width: 50px;
       height: 50px;
       animation: spin 1s linear infinite;
     }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+
+    /* Exemplo de posições simétricas para 8 Hello Kittys em círculo */
     .kitty-spin:nth-child(1) {
-      top: 0; left: 50%;
-      transform: translateX(-50%);
+      top: 0%; left: 50%;
+      transform: translate(-50%, 0);
     }
     .kitty-spin:nth-child(2) {
-      top: 15%; left: 85%;
+      top: 20%; left: 87%;
       transform: translate(-50%, -50%);
     }
     .kitty-spin:nth-child(3) {
@@ -242,25 +245,32 @@
       transform: translate(-50%, -50%);
     }
     .kitty-spin:nth-child(4) {
-      top: 85%; left: 85%;
+      top: 80%; left: 87%;
       transform: translate(-50%, -50%);
     }
     .kitty-spin:nth-child(5) {
-      bottom: -20%; left: 50%;
-      transform: translateX(-50%);
+      top: 100%; left: 50%;
+      transform: translate(-50%, -100%);
     }
     .kitty-spin:nth-child(6) {
-      top: 85%; left: 15%;
+      top: 80%; left: 13%;
       transform: translate(-50%, -50%);
     }
     .kitty-spin:nth-child(7) {
-      top: 50%; left: 0;
+      top: 50%; left: 0%;
       transform: translate(-50%, -50%);
     }
     .kitty-spin:nth-child(8) {
-      top: 15%; left: 15%;
+      top: 20%; left: 13%;
       transform: translate(-50%, -50%);
     }
+
+    /* Animação de rotação */
+    @keyframes spin {
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
 
     /* Responsivo < 600px */
     @media (max-width: 600px) {
