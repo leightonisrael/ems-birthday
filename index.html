@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Convite Ems Birthday</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    /* Reset básico */
-    * {
+    /* Reset + estilo básico */
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    /* Corpo principal */
-    body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden; /* remove rolagem horizontal */
+      font-family: 'Gloria Hallelujah', cursive;
       background: #f8bbd0; /* Rosa claro */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 100%;
-      min-height: 100vh;
-      font-family: 'Gloria Hallelujah', cursive;
+      box-sizing: border-box;
     }
 
     h1, h2, p, button {
@@ -41,13 +44,12 @@
       transition: 0.3s;
       text-transform: uppercase;
     }
-
     .open-invite-btn:hover {
       background: #ec407a;
       color: #fff;
     }
 
-    /* Overlay do modal (fundo escuro) */
+    /* Overlay do modal (fundo escuro), cobre toda a tela */
     .overlay {
       position: fixed;
       top: 0;
@@ -59,20 +61,24 @@
       justify-content: center;
       align-items: center;
       z-index: 999;
-      padding: 10px; /* pra evitar que o conteúdo encoste demais nas bordas */
+      padding: 10px;
+      box-sizing: border-box;
+      overflow-y: auto; /* rolagem vertical se o conteúdo for muito grande */
     }
 
-    /* Container do convite (o “modal” em si) */
+    /* Container do convite (o “modal” em si) em telas grandes */
     .convite-container {
       position: relative;
       background: #fff;
       max-width: 600px;
       width: 100%;
+      max-height: 90vh;  /* Para não estourar em telas grandes */
+      overflow-y: auto;
       border-radius: 10px;
       padding: 20px;
       text-align: center;
       box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
-      overflow: hidden; /* permite cortar as estrelas se ultrapassarem */
+      margin: 0 auto;
     }
 
     .convite-container a {
@@ -81,7 +87,7 @@
       font-weight: bold;
     }
 
-    /* Fechar convite (botão x) */
+    /* Botão de fechar (X) */
     .close-btn {
       position: absolute;
       top: 10px;
@@ -98,31 +104,30 @@
       align-items: center;
       justify-content: center;
       transition: 0.3s;
+      z-index: 2;
     }
-
     .close-btn:hover {
       background: #ec407a;
       color: #fff;
     }
 
-    /* Imagem da Hello Kitty */
+    /* Imagem Hello Kitty */
     .kitty-img {
       max-width: 200px;
       margin-bottom: 15px;
     }
 
+    /* Títulos e parágrafos */
     .convite-container h1 {
       color: #ec407a;
       margin-bottom: 5px;
       font-size: 32px;
     }
-
     .convite-container h2 {
       color: #ad1457;
       margin-bottom: 15px;
       font-size: 24px;
     }
-
     .convite-container p {
       color: #333;
       margin-bottom: 20px;
@@ -134,7 +139,6 @@
     .confirmacao-container {
       margin-bottom: 20px;
     }
-
     .confirmacao-container input {
       padding: 10px;
       border: 2px solid #ec407a;
@@ -144,7 +148,6 @@
       max-width: 300px;
       margin-right: 5px;
     }
-
     .confirmacao-container button {
       padding: 10px 20px;
       border: none;
@@ -155,7 +158,6 @@
       cursor: pointer;
       transition: background-color 0.3s;
     }
-
     .confirmacao-container button:hover {
       background-color: #d81b60;
     }
@@ -176,8 +178,6 @@
       opacity: 0.8;
       pointer-events: none; /* Para não interferir no clique */
     }
-
-    /* Animação de "piscar" das estrelas */
     @keyframes pisca {
       0%, 100% { opacity: 0.8; transform: scale(1); }
       50% { opacity: 0.2; transform: scale(1.2); }
@@ -194,12 +194,11 @@
         opacity: 1;
       }
     }
-
     .overlay .convite-container {
-      animation: abrirConvite 0.5s ease-out;
+      animation: abrirConvite 0.4s ease-out;
     }
 
-    /* Fundo escuro para o loading */
+    /* Overlay de LOADING (tela inteira), com Hello Kittys girando ao centro */
     #loading-overlay {
       position: fixed;
       top: 0;
@@ -207,114 +206,119 @@
       width: 100vw;
       height: 100vh;
       background: rgba(0, 0, 0, 0.7);
-      display: flex;
+      display: none;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
+      z-index: 2000; /* acima do convite */
     }
-
     /* Contêiner para as Hello Kittys girando em círculo */
     .loading-circle {
       position: relative;
-      width: 200px; /* Tamanho do círculo p/ 8 imagens */
+      width: 200px;
       height: 200px;
     }
-
-    .loading-circle .kitty-spin {
+    .kitty-spin {
       position: absolute;
       width: 50px;
       height: 50px;
       animation: spin 1s linear infinite;
     }
-
-    /* Posicionamento das Hello Kittys em círculo */
-    .loading-circle .kitty-spin:nth-child(1) {
-      top: 0;          left: 50%;
-      transform: translateX(-50%);
-    }
-    .loading-circle .kitty-spin:nth-child(2) {
-      top: 15%;        left: 85%;
-      transform: translate(-50%, -50%);
-    }
-    .loading-circle .kitty-spin:nth-child(3) {
-      top: 50%;        left: 100%;
-      transform: translate(-50%, -50%);
-    }
-    .loading-circle .kitty-spin:nth-child(4) {
-      top: 85%;        left: 85%;
-      transform: translate(-50%, -50%);
-    }
-    .loading-circle .kitty-spin:nth-child(5) {
-      bottom: -20%;    left: 50%;
-      transform: translateX(-50%);
-    }
-    .loading-circle .kitty-spin:nth-child(6) {
-      top: 85%;        left: 15%;
-      transform: translate(-50%, -50%);
-    }
-    .loading-circle .kitty-spin:nth-child(7) {
-      top: 50%;        left: 0;
-      transform: translate(-50%, -50%);
-    }
-    .loading-circle .kitty-spin:nth-child(8) {
-      top: 15%;        left: 15%;
-      transform: translate(-50%, -50%);
-    }
-
-    /* Animação de rotação das mini "Hello Kittys" */
     @keyframes spin {
-      0% {
-        transform: rotate(0deg);
-      }
-      100% {
-        transform: rotate(360deg);
-      }
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Posicionamento das Hello Kittys em círculo */
+    .kitty-spin:nth-child(1) {
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+    }
+    .kitty-spin:nth-child(2) {
+      top: 15%; left: 85%;
+      transform: translate(-50%, -50%);
+    }
+    .kitty-spin:nth-child(3) {
+      top: 50%; left: 100%;
+      transform: translate(-50%, -50%);
+    }
+    .kitty-spin:nth-child(4) {
+      top: 85%; left: 85%;
+      transform: translate(-50%, -50%);
+    }
+    .kitty-spin:nth-child(5) {
+      bottom: -20%; left: 50%;
+      transform: translateX(-50%);
+    }
+    .kitty-spin:nth-child(6) {
+      top: 85%; left: 15%;
+      transform: translate(-50%, -50%);
+    }
+    .kitty-spin:nth-child(7) {
+      top: 50%; left: 0;
+      transform: translate(-50%, -50%);
+    }
+    .kitty-spin:nth-child(8) {
+      top: 15%; left: 15%;
+      transform: translate(-50%, -50%);
     }
 
-    /* =========================
-       RESPONSIVO: telas < 600px
-       ========================= */
+    /*  
+       =========================
+         AJUSTES para telas < 600px
+       =========================
+       Deixamos o convite com 80% da tela,
+       tudo menor: fontes, imagem, etc.
+    */
     @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-
-      .open-invite-btn {
-        font-size: 16px;
-        padding: 10px 20px;
+      .overlay {
+        padding: 0;
+        align-items: center; 
       }
 
       .convite-container {
-        padding: 15px;
+        width: 80vw;        /* 80% da largura da tela */
+        height: 80vh;       /* 80% da altura da tela */
+        max-width: none;
+        max-height: none;   /* Senão conflita com 80vh */
+        margin: 0;
+        padding: 10px;      /* Menos padding */
+        overflow-y: auto;   /* Rolagem dentro do convite se precisar */
+        border-radius: 8px;
       }
 
       .kitty-img {
-        max-width: 150px;
-      }
-
-      .convite-container h1 {
-        font-size: 26px;
-      }
-
-      .convite-container h2 {
-        font-size: 20px;
-      }
-
-      .convite-container p {
-        font-size: 14px;
-      }
-
-      .confirmacao-container input {
-        width: 100%;
+        max-width: 100px;
         margin-bottom: 10px;
       }
 
+      .convite-container h1 {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+      .convite-container h2 {
+        font-size: 16px;
+        margin-bottom: 10px;
+      }
+      .convite-container p {
+        font-size: 13px;
+        margin-bottom: 15px;
+        line-height: 1.4;
+      }
+
+      .confirmacao-container input,
       .confirmacao-container button {
-        width: 100%;
+        font-size: 14px;
       }
 
       #mensagem-confirmacao {
-        font-size: 14px;
+        font-size: 13px;
+      }
+
+      /* Deixar estrelas menores e ocultar a maioria */
+      .estrela {
+        font-size: 18px;
+      }
+      .estrela:nth-of-type(n+5) {
+        display: none;
       }
     }
   </style>
@@ -330,8 +334,8 @@
       <div class="close-btn" onclick="fecharConvite()">X</div>
 
       <!-- Imagem Hello Kitty -->
-      <img 
-        src="hello.png" 
+      <img
+        src="hello.png"
         alt="Hello Kitty"
         class="kitty-img"
       />
@@ -341,34 +345,28 @@
       <p>
         Vai rolar um barzinho especial e quero você comigo!
         <br />
-        O tema não é Hello Kitty, mas vai ser do jeitinho que eu amo – simples, divertido e cheio de gente querida.
+        O tema não é Hello Kitty, mas vai ser do jeitinho que eu amo.
       </p>
       <p>
         <strong>Data:</strong> 19 de Abril<br />
         <strong>Horário:</strong> 19h<br />
         <strong>Local:</strong>
-        <a href="https://maps.app.goo.gl/JzQqeo6BCFPaQKGJ6" target="_blank">
+        <a
+          href="https://maps.app.goo.gl/JzQqeo6BCFPaQKGJ6"
+          target="_blank"
+        >
           Bafafá Bar
         </a>
       </p>
 
       <div class="confirmacao-container">
-        <input type="text" id="nome" placeholder="Digite seu nome" autocomplete="off" />
+        <input
+          type="text"
+          id="nome"
+          placeholder="Digite seu nome"
+          autocomplete="off"
+        />
         <button onclick="confirmarPresenca()">Confirmar</button>
-      </div>
-
-      <!-- Overlay de loading com Hello Kittys girando -->
-      <div id="loading-overlay" style="display: none;">
-        <div class="loading-circle">
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
-        </div>
       </div>
 
       <div id="mensagem-confirmacao"></div>
@@ -378,21 +376,26 @@
       <span class="estrela" style="top: 80px; left: 100px;">★</span>
       <span class="estrela" style="top: 50px; left: 200px;">★</span>
       <span class="estrela" style="top: 150px; left: 300px;">★</span>
-      <span class="estrela" style="top: 220px; left: 80px;">★</span>
-      <span class="estrela" style="top: 250px; left: 230px;">★</span>
-      <span class="estrela" style="top: 300px; left: 120px;">★</span>
       <span class="estrela" style="bottom: 40px; right: 50px;">★</span>
-      <span class="estrela" style="bottom: 80px; right: 120px;">★</span>
-      <span class="estrela" style="bottom: 140px; right: 180px;">★</span>
-      <span class="estrela" style="bottom: 200px; right: 30px;">★</span>
-      <span class="estrela" style="bottom: 260px; right: 150px;">★</span>
-      <span class="estrela" style="top: 100px; left: 400px;">★</span>
-      <span class="estrela" style="top: 200px; left: 450px;">★</span>
+      <!-- (As demais estrelas ficaram ocultas em telas menores) -->
+    </div>
+  </div>
+
+  <!-- Overlay de loading (tela inteira), com Hello Kittys ao centro -->
+  <div id="loading-overlay">
+    <div class="loading-circle">
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+      <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
     </div>
   </div>
 
   <script>
-    // URL do seu endpoint no Google Apps Script:
     const API_URL = "https://script.google.com/macros/s/AKfycbwSI7w7ZgrVZVcjiw8t2o9hpTsVOZqzwI4mHYLuNpyoSq-hnZirY2EXOUmAX-m9MHIMGQ/exec";
 
     function abrirConvite() {
@@ -413,7 +416,7 @@
         return;
       }
 
-      // Exibe o overlay de loading
+      // Exibe o overlay de loading (tela inteira)
       loadingOverlay.style.display = "flex";
       mensagemDiv.textContent = "";
 
