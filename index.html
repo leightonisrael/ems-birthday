@@ -142,7 +142,7 @@
       align-items: center;
       justify-content: center;
       flex-wrap: wrap; /* se muito estreito, quebra linha */
-      gap: 10px;       /* espaçamento entre input e botão */
+      gap: 28px;       /* espaçamento entre input e botão */
     }
 
     .confirmacao-container input {
@@ -168,7 +168,6 @@
 
     #mensagem-confirmacao {
       color: #ec407a;
-      font-weight: bold;
       font-size: 16px;
       margin-top: 10px;
     }
@@ -298,7 +297,7 @@
       }
       .confirmacao-container {
         margin-bottom: 15px;
-        gap: 12px;
+        gap: 28px;
       }
       .confirmacao-container input, 
       .confirmacao-container button {
@@ -344,11 +343,13 @@
         <strong>Data:</strong> 19 de Abril<br />
         <strong>Horário:</strong> 19h<br />
         <strong>Local:</strong>
-        <a
-          href="https://maps.app.goo.gl/JzQqeo6BCFPaQKGJ6"
-          target="_blank"
-        >
+        <a href="https://maps.app.goo.gl/JzQqeo6BCFPaQKGJ6">
           Bafafá Bar
+          <img 
+            src="link-icon.png" 
+            alt="Ícone de link" 
+            style="width: 16px; height: 16px; margin-left: 5px; vertical-align: middle;"
+          />
         </a>
       </p>
 
@@ -427,9 +428,19 @@
         // Mostra a mensagem de confirmação
         // Inclui uma mini Hello Kitty com <img> pequeno
         mensagemDiv.innerHTML = `
-          Obrigado(a), ${nome}! Sua presença foi confirmada. 
-          <img src="hello.png" alt="Mini Hello Kitty" style="width:30px; margin-left:5px;" />
-        `;
+        <span style="color: #000;">
+          Obrigado(a), 
+          <span style="color: #ec407a; font-weight: bold;">
+            ${nome}
+          </span>
+          ! Sua presença foi confirmada.
+        </span>
+        <img 
+          src="hello.png" 
+          alt="Mini Hello Kitty" 
+          style="width: 25px; margin-left: 5px;" 
+        />
+      `;
 
         console.log("Resposta do servidor:", textoResposta);
 
