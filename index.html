@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Convite Ems Birthday</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet">
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #f8bbd0; /* Rosa claro */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-family: 'Gloria Hallelujah', cursive;
+    }
+    h1, h2, p, button {
+      font-family: 'Gloria Hallelujah', cursive;
+    }
+    .open-invite-btn {
+      background: #fff;
+      border: 2px solid #ec407a;
+      color: #ec407a;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: 0.3s;
+      text-transform: uppercase;
+    }
+    .open-invite-btn:hover {
+      background: #ec407a;
+      color: #fff;
+    }
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(249, 151, 186, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+    .convite-container {
+      position: relative;
+      background: #fff;
+      max-width: 600px;
+      width: 90%;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+      overflow: hidden;
+    }
+    .convite-container a {
+      color: #ec407a;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #f48fb1;
+      border: 2px solid #ec407a;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      color: #ec407a;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.3s;
+    }
+    .close-btn:hover {
+      background: #ec407a;
+      color: #fff;
+    }
+    .kitty-img {
+      max-width: 200px;
+      margin-bottom: 15px;
+    }
+    .convite-container h1 {
+      color: #ec407a;
+      margin-bottom: 5px;
+      font-size: 32px;
+    }
+    .convite-container h2 {
+      color: #ad1457;
+      margin-bottom: 15px;
+      font-size: 24px;
+    }
+    .convite-container p {
+      color: #333;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    .confirmacao-container {
+      margin-bottom: 20px;
+    }
+    .confirmacao-container input {
+      padding: 10px;
+      border: 2px solid #ec407a;
+      border-radius: 5px;
+      font-size: 16px;
+      width: 70%;
+      max-width: 300px;
+      margin-right: 5px;
+    }
+    .confirmacao-container button {
+      padding: 10px 20px;
+      border: none;
+      background: #ec407a;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .confirmacao-container button:hover {
+      background-color: #d81b60;
+    }
+    #mensagem-confirmacao {
+      color: #ec407a;
+      font-weight: bold;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+    .estrela {
+      position: absolute;
+      font-size: 24px;
+      color: gold;
+      animation: pisca 2s infinite ease-in-out;
+      opacity: 0.8;
+      pointer-events: none;
+    }
+    @keyframes pisca {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 0.2; transform: scale(1.2); }
+    }
+    @keyframes abrirConvite {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    .overlay .convite-container {
+      animation: abrirConvite 0.5s ease-out;
+    }
+  /* Fundo escuro para o loading */
+  #loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  /* Contêiner para as Hello Kittys girando em círculo */
+  .loading-circle {
+    position: relative;
+    width: 200px; /* Aumente o tamanho do círculo para acomodar 8 imagens */
+    height: 200px;
+  }
+
+  .loading-circle .kitty-spin {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+
+  /* Posicionamento das Hello Kittys em círculo */
+  .loading-circle .kitty-spin:nth-child(1) {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .loading-circle .kitty-spin:nth-child(2) {
+    top: 15%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+  }
+  .loading-circle .kitty-spin:nth-child(3) {
+    top: 50%;
+    left: 100%;
+    transform: translate(-50%, -50%);
+  }
+  .loading-circle .kitty-spin:nth-child(4) {
+    top: 85%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+  }
+  .loading-circle .kitty-spin:nth-child(5) {
+    bottom: -20%; /* Ajuste para descer um pouco mais */
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  .loading-circle .kitty-spin:nth-child(6) {
+    top: 85%;
+    left: 15%;
+    transform: translate(-50%, -50%);
+  }
+  .loading-circle .kitty-spin:nth-child(7) {
+    top: 50%;
+    left: 0;
+    transform: translate(-50%, -50%);
+  }
+  .loading-circle .kitty-spin:nth-child(8) {
+    top: 15%;
+    left: 15%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* Animação de rotação */
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  /* Ajuste para telas menores (smartphones) */
+  @media (max-width: 768px) {
+    /* Ajuste do círculo de loading */
+    .loading-circle {
+      width: 150px; /* Reduz o tamanho do círculo */
+      height: 150px;
+    }
+
+    .loading-circle .kitty-spin {
+      width: 40px; /* Reduz o tamanho das imagens */
+      height: 40px;
+    }
+
+    /* Ajuste do convite */
+    .convite-container {
+      max-width: 90%; /* Reduz a largura do convite */
+      padding: 15px;
+    }
+
+    .convite-container h1 {
+      font-size: 24px; /* Reduz o tamanho do título */
+    }
+
+    .convite-container h2 {
+      font-size: 18px; /* Reduz o tamanho do subtítulo */
+    }
+
+    .convite-container p {
+      font-size: 14px; /* Reduz o tamanho do texto */
+    }
+
+    .confirmacao-container input {
+      width: 100%; /* Faz o input ocupar toda a largura */
+      margin-bottom: 10px; /* Adiciona espaçamento entre o input e o botão */
+    }
+
+    .confirmacao-container button {
+      width: 100%; /* Faz o botão ocupar toda a largura */
+    }
+
+    /* Ajuste do botão de abrir o convite */
+    .open-invite-btn {
+      font-size: 16px; /* Reduz o tamanho da fonte */
+      padding: 10px 20px; /* Ajusta o padding */
+    }
+  }
+
+  @media (max-width: 480px) {
+    /* Ajuste adicional para telas muito pequenas */
+    .loading-circle {
+      width: 120px; /* Reduz ainda mais o tamanho do círculo */
+      height: 120px;
+    }
+
+    .loading-circle .kitty-spin {
+      width: 30px; /* Reduz ainda mais o tamanho das imagens */
+      height: 30px;
+    }
+
+    .convite-container h1 {
+      font-size: 20px; /* Reduz o tamanho do título */
+    }
+
+    .convite-container h2 {
+      font-size: 16px; /* Reduz o tamanho do subtítulo */
+    }
+
+    .convite-container p {
+      font-size: 12px; /* Reduz o tamanho do texto */
+    }
+  }
+  /* Ajuste para telas menores (tablets e smartphones) */
+  @media (max-width: 768px) {
+    body {
+      padding: 10px; /* Adiciona espaçamento nas laterais */
+    }
+
+    .convite-container {
+      max-width: 90%; /* Reduz a largura do convite */
+      padding: 15px; /* Reduz o padding interno */
+    }
+
+    .convite-container h1 {
+      font-size: 24px; /* Reduz o tamanho do título */
+    }
+
+    .convite-container h2 {
+      font-size: 18px; /* Reduz o tamanho do subtítulo */
+    }
+
+    .convite-container p {
+      font-size: 14px; /* Reduz o tamanho do texto */
+    }
+
+    .confirmacao-container input {
+      width: 100%; /* Faz o input ocupar toda a largura */
+      margin-bottom: 10px; /* Adiciona espaçamento entre o input e o botão */
+    }
+
+    .confirmacao-container button {
+      width: 100%; /* Faz o botão ocupar toda a largura */
+    }
+
+    .open-invite-btn {
+      font-size: 16px; /* Reduz o tamanho da fonte */
+      padding: 10px 20px; /* Ajusta o padding */
+    }
+
+    .estrela {
+      font-size: 18px; /* Reduz o tamanho das estrelas decorativas */
+    }
+  }
+
+  /* Ajuste para telas muito pequenas (smartphones pequenos) */
+  @media (max-width: 480px) {
+    body {
+      padding: 5px; /* Reduz ainda mais o espaçamento nas laterais */
+    }
+
+    .convite-container {
+      max-width: 100%; /* Faz o convite ocupar quase toda a largura */
+      padding: 10px; /* Reduz ainda mais o padding interno */
+    }
+
+    .convite-container h1 {
+      font-size: 20px; /* Reduz o tamanho do título */
+    }
+
+    .convite-container h2 {
+      font-size: 16px; /* Reduz o tamanho do subtítulo */
+    }
+
+    .convite-container p {
+      font-size: 12px; /* Reduz o tamanho do texto */
+    }
+
+    .kitty-img {
+      max-width: 150px; /* Reduz o tamanho da imagem da Hello Kitty */
+    }
+
+    .confirmacao-container input {
+      font-size: 14px; /* Reduz o tamanho da fonte do input */
+    }
+
+    .confirmacao-container button {
+      font-size: 14px; /* Reduz o tamanho da fonte do botão */
+      padding: 8px 15px; /* Ajusta o padding */
+    }
+
+    .open-invite-btn {
+      font-size: 14px; /* Reduz o tamanho da fonte */
+      padding: 8px 15px; /* Ajusta o padding */
+    }
+
+    .estrela {
+      font-size: 14px; /* Reduz ainda mais o tamanho das estrelas decorativas */
+    }
+
+    .loading-circle {
+      width: 100px; /* Reduz o tamanho do círculo de loading */
+      height: 100px;
+    }
+
+    .loading-circle .kitty-spin {
+      width: 25px; /* Reduz o tamanho das imagens no círculo */
+      height: 25px;
+    }
+  }
+  </style>
+</head>
+<body>
+  <!-- Botão para abrir o convite -->
+  <button class="open-invite-btn" onclick="abrirConvite()">Clique para Abrir o Convite</button>
+
+  <!-- Overlay (fundo escuro) que contém o convite -->
+  <div class="overlay" id="overlay">
+    <div class="convite-container" id="convite">
+      <!-- Botão de fechar -->
+      <div class="close-btn" onclick="fecharConvite()">X</div>
+
+      <!-- Imagem Hello Kitty -->
+      <img 
+        src="hello.png" 
+        alt="Hello Kitty"
+        class="kitty-img"
+      />
+
+      <h1>Convite Especial</h1>
+      <h2>💫⭐ Ems Birthday 💫⭐</h2>
+      <p>
+        Vai rolar um barzinho especial e quero você comigo!
+        <br />
+        O tema não é Hello Kitty, mas vai ser do jeitinho que eu amo - simples, divertido e cheio de gente querida.
+      </p>
+      <p>
+        <strong>Data:</strong> 19 de Abril<br />
+        <strong>Horário:</strong> 19h<br />
+        <strong>Local:</strong>
+        <a href="https://maps.app.goo.gl/JzQqeo6BCFPaQKGJ6">
+          Bafafá Bar
+          <img 
+            src="link-icon.png" 
+            alt="Ícone de link" 
+            style="width: 16px; height: 16px; margin-left: 5px; vertical-align: middle;"
+          />
+        </a>
+      </p>
+
+      <div class="confirmacao-container">
+        <input type="text" id="nome" placeholder="Digite seu nome" autocomplete="off" />
+        <button onclick="confirmarPresenca()">Confirmar</button>
+      </div>
+      <div id="loading-overlay" style="display: none;">
+        <div class="loading-circle">
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+          <img src="hello.png" class="kitty-spin" alt="Hello Kitty" />
+        </div>
+      </div>
+      <div id="mensagem-confirmacao"></div>
+
+      <!-- Estrelas decorativas -->
+      <span class="estrela" style="top: 20px; left: 30px;">★</span>
+      <span class="estrela" style="top: 80px; left: 100px;">★</span>
+      <span class="estrela" style="top: 50px; left: 200px;">★</span>
+      <span class="estrela" style="top: 150px; left: 300px;">★</span>
+      <span class="estrela" style="top: 220px; left: 80px;">★</span>
+      <span class="estrela" style="top: 250px; left: 230px;">★</span>
+      <span class="estrela" style="top: 300px; left: 120px;">★</span>
+      <span class="estrela" style="bottom: 40px; right: 50px;">★</span>
+      <span class="estrela" style="bottom: 80px; right: 120px;">★</span>
+      <span class="estrela" style="bottom: 140px; right: 180px;">★</span>
+      <span class="estrela" style="bottom: 200px; right: 30px;">★</span>
+      <span class="estrela" style="bottom: 260px; right: 150px;">★</span>
+      <span class="estrela" style="top: 100px; left: 400px;">★</span>
+      <span class="estrela" style="top: 200px; left: 450px;">★</span>
+    </div>
+  </div>
+
+  <script>
+    // URL do seu endpoint no Google Apps Script:
+    const API_URL = "https://script.google.com/macros/s/AKfycbwSI7w7ZgrVZVcjiw8t2o9hpTsVOZqzwI4mHYLuNpyoSq-hnZirY2EXOUmAX-m9MHIMGQ/exec";
+
+    function abrirConvite() {
+      document.getElementById('overlay').style.display = 'flex';
+    }
+
+    function fecharConvite() {
+      document.getElementById('overlay').style.display = 'none';
+    }
+
+    function confirmarPresenca() {
+    const nome = document.getElementById("nome").value.trim();
+    const mensagemDiv = document.getElementById("mensagem-confirmacao");
+    const loadingOverlay = document.getElementById("loading-overlay");
+
+    if (nome === "") {
+      alert("Por favor, insira seu nome para confirmar a presença.");
+      return;
+    }
+
+    // Exibe o overlay de loading
+    loadingOverlay.style.display = "flex";
+    mensagemDiv.textContent = "";
+
+    fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      body: "nome=" + encodeURIComponent(nome)
+    })
+      .then(response => response.text())
+      .then(textoResposta => {
+        mensagemDiv.textContent = `Obrigado(a), ${nome}! Sua presença foi confirmada.`;
+        document.getElementById("nome").value = "";
+        console.log("Resposta do servidor:", textoResposta);
+      })
+      .catch(error => {
+        mensagemDiv.textContent = "Ocorreu um erro ao confirmar. Tente novamente.";
+        console.error("Erro:", error);
+      })
+      .finally(() => {
+        // Oculta o overlay de loading
+        loadingOverlay.style.display = "none";
+      });
+  }
+  </script>
+</body>
+</html>
